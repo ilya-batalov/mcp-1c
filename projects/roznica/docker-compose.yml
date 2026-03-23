@@ -122,7 +122,7 @@ services:
       # ── Дополнительно (раскомментируйте при необходимости) ──
       # Эмбеддинги
       # - OPENAI_EMBEDDING_DIMENSIONS=${OPENAI_EMBEDDING_DIMENSIONS:-4096}
-      # - EMBEDDING_MAX_TOKENS=${EMBEDDING_MAX_TOKENS:-8192}
+      # - EMBEDDING_MAX_TOKENS=${EMBEDDING_MAX_TOKENS:-7500}
       # - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.1}
       # - OPENAI_MODEL_IS_REASONING=${OPENAI_MODEL_IS_REASONING:-false}
       # Индексация
