@@ -1,0 +1,21 @@
+# Пример одноразового сброса индексов (RESET_DATABASE / RESET_CACHE).
+# Скопируйте рядом с docker-compose.yml как docker-compose.reset-override.yml
+# или вызовите ..\scripts\mcp-reset.ps1 -Global (временный override без копирования).
+#
+# Из каталога global:
+#   docker compose --project-name mcp-global --env-file ..\.env -f docker-compose.yml -f docker-compose.reset-override.example.yml up -d
+# Затем снова ..\scripts\start-global.ps1 — без второго файла подтянутся значения из .env.
+
+services:
+  help_search:
+    environment:
+      RESET_DATABASE: "true"
+      RESET_CACHE: "true"
+  ssl_search:
+    environment:
+      RESET_DATABASE: "true"
+      RESET_CACHE: "true"
+  template_search:
+    environment:
+      RESET_DATABASE: "true"
+      RESET_CACHE: "true"

@@ -1,0 +1,84 @@
+services:
+
+  syntax_check:
+    image: comol/1c_syntaxcheck_mcp:latest
+    container_name: mcp_syntax_check
+    restart: unless-stopped
+    ports:
+      - "8002:8002"
+    environment:
+      LICENSE_KEY: ${LICENSE_KEY_SYNTAX_CHECK}
+
+  help_search:
+    image: comol/1c_help_mcp:latest
+    container_name: mcp_help_search
+    restart: unless-stopped
+    ports:
+      - "8003:8003"
+    environment:
+      LICENSE_KEY: ${LICENSE_KEY_HELP_SEARCH}
+      RESET_DATABASE: "${HELP_SEARCH_RESET_DATABASE:-false}"
+      RESET_CACHE: "${HELP_SEARCH_RESET_CACHE:-false}"
+      OPENAI_API_BASE: ${OPENAI_API_BASE}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL}
+    volumes:
+      - "${PLATFORM_BIN_PATH}:/1c_docs:ro"
+      - "./volumes/help_search:/app/chroma_db"
+      - "./volumes/model_cache:/app/model_cache"
+
+  code_checker:
+    image: comol/1c-code-checker:latest
+    container_name: mcp_code_checker
+    restart: unless-stopped
+    ports:
+      - "8007:8007"
+    environment:
+      LICENSE_KEY: ${LICENSE_KEY_CODE_CHECKER}
+      ONEC_AI_TOKEN: ${ONEC_AI_TOKEN}
+
+  ssl_search:
+    image: comol/mcp_ssl_server:latest
+    container_name: mcp_ssl_search
+    restart: unless-stopped
+    ports:
+      - "8008:8008"
+    environment:
+      LICENSE_KEY: ${LICENSE_KEY_SSL_SEARCH}
+      SSL_VERSION: ${SSL_VERSION}
+      RESET_DATABASE: "${SSL_SEARCH_RESET_DATABASE:-false}"
+      RESET_CACHE: "${SSL_SEARCH_RESET_CACHE:-false}"
+      FORCE_REINDEX_ON_DIMENSION_MISMATCH: "true"
+      EMBEDDING_INPUT_TYPE_ENABLED: "true"
+      OPENAI_API_BASE: ${OPENAI_API_BASE}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL}
+      EMBEDDING_DIMENSIONS: "${EMBEDDING_DIMENSIONS:-}"
+    volumes:
+      - "./volumes/ssl_search:/app/chroma_db"
+
+  forms_server:
+    image: comol/1c_forms:latest
+    container_name: mcp_forms_server
+    restart: unless-stopped
+    ports:
+      - "8011:8011"
+    environment:
+      LICENSE_KEY: ${LICENSE_KEY_FORMS_SERVER}
+
+  template_search:
+    image: comol/template-search-mcp:latest
+    container_name: mcp_template_search
+    restart: unless-stopped
+    ports:
+      - "8004:8004"
+    environment:
+      LICENSE_KEY: ${LICENSE_KEY_TEMPLATES}
+      RESET_DATABASE: "${TEMPLATE_SEARCH_RESET_DATABASE:-false}"
+      RESET_CACHE: "${TEMPLATE_SEARCH_RESET_CACHE:-false}"
+      OPENAI_API_BASE: ${OPENAI_API_BASE}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL}
+      EMBEDDING_DIMENSIONS: "${EMBEDDING_DIMENSIONS:-}"
+    volumes:
+      - "./volumes/template_search:/app/data"

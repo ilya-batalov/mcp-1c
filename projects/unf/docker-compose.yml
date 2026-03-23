@@ -1,0 +1,139 @@
+services:
+
+  # ── CodeMetadataSearchServer ───────────────────────────────
+  # Запуск: docker compose --profile metadata up -d
+  code_metadata:
+    profiles: ["metadata"]
+    image: comol/1c_code_metadata_mcp:latest
+    container_name: mcp_code_metadata_${PROJECT_NAME}
+    restart: unless-stopped
+    ports:
+      - "${CODE_METADATA_PORT}:8000"
+    environment:
+      LICENSE_KEY: ${LICENSE_KEY_CODE_METADATA}
+      METADATA_PATH: /app/metadata
+      CODE_PATH: /app/code
+      RESET_DATABASE: "${CODE_METADATA_RESET_DATABASE:-false}"
+      RESET_CACHE: "${CODE_METADATA_RESET_CACHE:-false}"
+      # Индексация
+      INDEX_CODE: "${INDEX_CODE:-true}"
+      INDEX_METADATA: "${INDEX_METADATA:-true}"
+      INDEX_HELP: "${INDEX_HELP:-true}"
+      INDEX_BATCH_SIZE: "${INDEX_BATCH_SIZE:-25}"
+      CHUNK_SIZE: "${CHUNK_SIZE:-1000}"
+      # Embedding (OpenRouter)
+      OPENAI_API_BASE: ${OPENAI_API_BASE}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_MODEL: ${OPENAI_MODEL}
+      EMBEDDING_DIMENSIONS: "${EMBEDDING_DIMENSIONS:-}"
+    volumes:
+      - "./data/report:/app/metadata:ro"
+      - "./data/src:/app/code:ro"
+      - "./volumes/code_metadata:/app/chroma_db"
+
+  # ── CloudEmbeddingsServer (альтернатива CodeMetadata) ──────
+  # Запуск: docker compose --profile cloud up -d
+  # Быстрее индексация, меньше образ, инкрементальная переиндексация.
+  # НЕ запускать одновременно с code_metadata — они альтернативны.
+  cloud_embeddings:
+    profiles: ["cloud"]
+    image: comol/1c_cloud_mcp_parallel:latest
+    container_name: mcp_cloud_embeddings_${PROJECT_NAME}
+    restart: unless-stopped
+    ports:
+      - "${CLOUD_PORT}:8000"
+    environment:
+      LICENSE_KEY: ${LICENSE_KEY_CLOUD_EMBEDDINGS}
+      # Провайдер и ключ
+      EMBEDDING_PROVIDER: openrouter
+      OPENROUTER_API_KEY: ${OPENAI_API_KEY}
+      EMBEDDING_MODEL: ${OPENAI_MODEL}
+      # Пути
+      SOURCE_PATH: /data/source
+      CHROMA_PATH: /data/chroma_db
+      # Индексация
+      AUTO_INDEX: "${AUTO_INDEX:-true}"
+      CHUNK_SIZE: "${CLOUD_CHUNK_SIZE:-1000}"
+      CHUNK_OVERLAP: "${CLOUD_CHUNK_OVERLAP:-100}"
+      MAX_BATCH_SIZE: "${CLOUD_MAX_BATCH_SIZE:-100}"
+      DEFAULT_SEARCH_LIMIT: "${CLOUD_DEFAULT_SEARCH_LIMIT:-10}"
+      # Параллельная обработка
+      EMBEDDING_CONCURRENCY: "${EMBEDDING_CONCURRENCY:-10}"
+      EMBEDDING_BATCH_SIZE: "${CLOUD_EMBEDDING_BATCH_SIZE:-10}"
+    volumes:
+      - "./data/src:/data/source:ro"
+      - "./volumes/cloud_embeddings:/data/chroma_db"
+
+  # ── Neo4j (для Graph Metadata Search) ──────────────────────
+  # Запуск: docker compose --profile graph up -d
+  neo4j:
+    profiles: ["graph"]
+    image: neo4j:latest
+    container_name: mcp_neo4j_${PROJECT_NAME}
+    restart: unless-stopped
+    ports:
+      - "${NEO4J_BROWSER_PORT}:7474"
+      - "${NEO4J_BOLT_PORT}:7687"
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD}
+      NEO4J_server_memory_heap_initial__size: 512m
+      NEO4J_server_memory_heap_max__size: 1g
+      NEO4J_server_memory_pagecache_size: 512m
+    volumes:
+      - "./volumes/graph_neo4j:/data"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider localhost:7474 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ── Graph Metadata Search ──────────────────────────────────
+  graph_metadata:
+    profiles: ["graph"]
+    image: comol/1c_graph_metadata:latest
+    container_name: mcp_graph_metadata_${PROJECT_NAME}
+    restart: unless-stopped
+    ports:
+      - "${GRAPH_PORT}:${GRAPH_MCP_PORT:-8006}"
+    environment:
+      LICENSE_KEY: ${LICENSE_KEY_GRAPH_METADATA}
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_USERNAME: neo4j
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD}
+      METADATA_DIRECTORY: /app/metadata
+      PROJECT_NAME: ${PROJECT_NAME}
+      RESET_DATABASE: "${GRAPH_METADATA_RESET_DATABASE:-false}"
+      AUTO_UPDATE_ON_STARTUP: "true"
+      ASYNC_VECTOR_INDEXING: "true"
+      # Эмбеддинги: OPENAI_EMBEDDING_* иначе OPENAI_API_BASE/KEY из .env
+      OPENAI_EMBEDDING_API_BASE: ${OPENAI_EMBEDDING_API_BASE:-${OPENAI_API_BASE}}
+      OPENAI_EMBEDDING_API_KEY: ${OPENAI_EMBEDDING_API_KEY:-${OPENAI_API_KEY}}
+      OPENAI_EMBEDDING_MODEL: ${OPENAI_EMBEDDING_MODEL:-${OPENAI_MODEL}}
+      OPENAI_EMBEDDING_DIMENSIONS: "${OPENAI_EMBEDDING_DIMENSIONS:-}"
+      EMBEDDING_MAX_TOKENS: "${EMBEDDING_MAX_TOKENS:-}"
+      # LLM для search_metadata / answer_metadata_question (опционально)
+      OPENAI_API_BASE: ${GRAPH_OPENAI_API_BASE:-}
+      OPENAI_API_KEY: ${GRAPH_OPENAI_API_KEY:-}
+      OPENAI_MODEL: "${GRAPH_LLM_MODEL:-}"
+      OPENAI_TEMPERATURE: "${OPENAI_TEMPERATURE:-0.1}"
+      OPENAI_MAX_COMPLETION_TOKENS: "${OPENAI_MAX_COMPLETION_TOKENS:-2000}"
+      OPENAI_MODEL_IS_REASONING: "${OPENAI_MODEL_IS_REASONING:-}"
+      # Индексация
+      CALCULATE_BUSINESS_INFO: "${CALCULATE_BUSINESS_INFO:-false}"
+      ENABLE_CODE_SEARCH: "${ENABLE_CODE_SEARCH:-true}"
+      ENABLE_BUSINESS_SEARCH: "${ENABLE_BUSINESS_SEARCH:-true}"
+      CODE_SEARCH_MAX_FILE_SIZE: "${CODE_SEARCH_MAX_FILE_SIZE:-50000}"
+      INDEX_BATCH_SIZE: "${GRAPH_INDEX_BATCH_SIZE:-50}"
+      MAX_TOKENS_PER_BATCH: "${MAX_TOKENS_PER_BATCH:-7500}"
+      # HTTP MCP (см. docs.onerpa.ru …/konfiguraciya)
+      MCP_HOST: ${GRAPH_MCP_HOST:-0.0.0.0}
+      MCP_PORT: ${GRAPH_MCP_PORT:-8006}
+      MCP_PATH: ${GRAPH_MCP_PATH:-/mcp}
+      MCP_USE_SSE: "${MCP_USE_SSE:-false}"
+      DEBUG: "${GRAPH_METADATA_DEBUG:-false}"
+    volumes:
+      - "./data/report:/app/metadata:ro"
+      - "./data/src:/app/metadata_files:ro"
+    depends_on:
+      neo4j:
+        condition: service_healthy

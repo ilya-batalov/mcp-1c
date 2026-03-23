@@ -1,0 +1,15 @@
+# Пример одноразового сброса (RESET_* при старте). Скопируйте в docker-compose.reset-override.yml
+# или используйте ..\..\scripts\mcp-reset.ps1 -ProjectName <имя>.
+#
+# Из каталога проекта (с нужными --profile), например:
+#   docker compose --project-name mcp-buh --project-directory . --env-file ..\..\.env --env-file .env -f docker-compose.yml --profile metadata --profile graph -f docker-compose.reset-override.example.yml up -d
+# Далее — обычный scripts\start-project.ps1 для того же проекта (без override).
+
+services:
+  code_metadata:
+    environment:
+      RESET_DATABASE: "true"
+      RESET_CACHE: "true"
+  graph_metadata:
+    environment:
+      RESET_DATABASE: "true"
