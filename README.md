@@ -140,7 +140,7 @@ Copy-Item .env.example .env
 
 Глобальные MCP и CodeMetadata по умолчанию используют OpenRouter: `OPENAI_API_BASE`, `OPENAI_API_KEY`, модель `qwen/qwen3-embedding-8b` в `OPENAI_MODEL`.
 
-**Graph Metadata Search** принимает в контейнер те же имена переменных (`OPENAI_API_BASE`, `OPENAI_API_KEY`), что и в [документации сервера](https://docs.onerpa.ru/mcp-servery-1c/servery/graph-metadata-search/konfiguraciya). В корневом `.env` можно задать отдельно `GRAPH_OPENAI_API_BASE` и `GRAPH_OPENAI_API_KEY` — ими подменяются значения для графа (LM Studio, прямой OpenAI и т.д.), не меняя endpoint для остальных сервисов. Если они не заданы, используются общие `OPENAI_*`.
+**Graph Metadata Search** в контейнере ожидает `OPENAI_API_BASE` и `OPENAI_API_KEY` ([документация](https://docs.onerpa.ru/mcp-servery-1c/servery/graph-metadata-search/konfiguraciya)). В корневом `.env` задайте `GRAPH_OPENAI_API_BASE` и `GRAPH_OPENAI_API_KEY` — compose подставляет их в эти переменные для графа (LM Studio, прямой OpenAI и т.д.), не меняя endpoint для остальных сервисов.
 
 ## Документация
 
