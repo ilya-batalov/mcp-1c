@@ -19,13 +19,14 @@ services:
       INDEX_CODE: "${INDEX_CODE:-true}"
       INDEX_METADATA: "${INDEX_METADATA:-true}"
       INDEX_HELP: "${INDEX_HELP:-true}"
-      INDEX_BATCH_SIZE: "${INDEX_BATCH_SIZE:-25}"
-      CHUNK_SIZE: "${CHUNK_SIZE:-1000}"
-      # Embedding (OpenRouter)
       OPENAI_API_BASE: ${OPENAI_API_BASE}
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       OPENAI_MODEL: ${OPENAI_MODEL}
-      EMBEDDING_DIMENSIONS: "${EMBEDDING_DIMENSIONS:-}"
+      # ── Дополнительно (раскомментируйте при необходимости) ──
+      # INDEX_BATCH_SIZE: "${INDEX_BATCH_SIZE:-25}"
+      # CHUNK_SIZE: "${CHUNK_SIZE:-1000}"
+      # Embedding (OpenRouter)
+      # EMBEDDING_DIMENSIONS: "${EMBEDDING_DIMENSIONS:-}"
     volumes:
       - "./data/report:/app/metadata:ro"
       - "./data/src:/app/code:ro"
@@ -53,13 +54,14 @@ services:
       CHROMA_PATH: /data/chroma_db
       # Индексация
       AUTO_INDEX: "${AUTO_INDEX:-true}"
-      CHUNK_SIZE: "${CLOUD_CHUNK_SIZE:-1000}"
-      CHUNK_OVERLAP: "${CLOUD_CHUNK_OVERLAP:-100}"
-      MAX_BATCH_SIZE: "${CLOUD_MAX_BATCH_SIZE:-100}"
-      DEFAULT_SEARCH_LIMIT: "${CLOUD_DEFAULT_SEARCH_LIMIT:-10}"
       # Параллельная обработка
-      EMBEDDING_CONCURRENCY: "${EMBEDDING_CONCURRENCY:-10}"
+      EMBEDDING_CONCURRENCY: "${EMBEDDING_CONCURRENCY:-5}"
       EMBEDDING_BATCH_SIZE: "${CLOUD_EMBEDDING_BATCH_SIZE:-10}"
+      # ── Дополнительно (раскомментируйте при необходимости) ──
+      # CHUNK_SIZE: "${CLOUD_CHUNK_SIZE:-1000}"
+      # CHUNK_OVERLAP: "${CLOUD_CHUNK_OVERLAP:-100}"
+      # MAX_BATCH_SIZE: "${CLOUD_MAX_BATCH_SIZE:-100}"
+      # DEFAULT_SEARCH_LIMIT: "${CLOUD_DEFAULT_SEARCH_LIMIT:-10}"
     volumes:
       - "./data/src:/data/source:ro"
       - "./volumes/cloud_embeddings:/data/chroma_db"
@@ -106,7 +108,6 @@ services:
       - OPENAI_API_BASE=${GRAPH_OPENAI_API_BASE}
       - OPENAI_API_KEY=${GRAPH_OPENAI_API_KEY}
       - OPENAI_MODEL=${GRAPH_LLM_MODEL}
-      - OPENAI_MAX_COMPLETION_TOKENS=${OPENAI_MAX_COMPLETION_TOKENS:-2000}
       # Эмбеддинги: OPENAI_EMBEDDING_* иначе OPENAI_API_BASE/KEY из .env
       - OPENAI_EMBEDDING_API_BASE=${OPENAI_EMBEDDING_API_BASE:-${OPENAI_API_BASE}}
       - OPENAI_EMBEDDING_API_KEY=${OPENAI_EMBEDDING_API_KEY:-${OPENAI_API_KEY}}
@@ -122,6 +123,7 @@ services:
       - PROJECT_NAME=${PROJECT_NAME}
       # ── Дополнительно (раскомментируйте при необходимости) ──
       # Эмбеддинги
+      # - OPENAI_MAX_COMPLETION_TOKENS=${OPENAI_MAX_COMPLETION_TOKENS:-2000}
       # - OPENAI_EMBEDDING_DIMENSIONS=${OPENAI_EMBEDDING_DIMENSIONS:-4096}
       # - EMBEDDING_MAX_TOKENS=${EMBEDDING_MAX_TOKENS:-7500}
       # - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.1}
