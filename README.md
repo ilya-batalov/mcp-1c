@@ -33,7 +33,14 @@ Copy-Item .env.example .env
 ### 2. Запустите глобальные серверы
 
 ```powershell
+# Все глобальные серверы
 .\scripts\start-global.ps1
+
+# Только отдельные серверы
+.\scripts\start-global.ps1 -Services syntax_check,help_search
+
+# Один сервер
+.\scripts\start-global.ps1 -Services ssl_search
 ```
 
 ### 3. Подготовьте данные конфигурации
@@ -66,8 +73,8 @@ Copy-Item .env.example .env
 
 | Скрипт | Назначение |
 |---|---|
-| `start-global.ps1` | Запуск глобальных серверов |
-| `stop-global.ps1` | Остановка глобальных серверов |
+| `start-global.ps1 [-Services ...]` | Запуск глобальных серверов (все или выборочно) |
+| `stop-global.ps1 [-Services ...]` | Остановка глобальных серверов (все или выборочно) |
 | `start-project.ps1 -Name X [-Services ...]` | Запуск серверов конфигурации |
 | `stop-project.ps1 -Name X [-Services ...]` | Остановка серверов конфигурации |
 | `new-project.ps1 -Name X -PortBase N` | Создание нового проекта |
@@ -108,7 +115,29 @@ Copy-Item .env.example .env
 .\config\install-mcp-config.ps1
 ```
 
-## Профили сервисов (выборочный запуск)
+## Выборочный запуск
+
+### Глобальные серверы
+
+Параметр `-Services` принимает имена сервисов из `global/docker-compose.yml`:
+
+| Имя сервиса | Описание |
+|---|---|
+| `syntax_check` | Проверка синтаксиса |
+| `help_search` | Поиск по справке платформы |
+| `code_checker` | Проверка кода |
+| `ssl_search` | Поиск по БСП |
+| `forms_server` | Работа с формами |
+| `template_search` | Поиск шаблонов кода |
+
+```powershell
+.\scripts\start-global.ps1 -Services syntax_check,help_search
+.\scripts\stop-global.ps1 -Services ssl_search
+```
+
+Без `-Services` запускаются/останавливаются все глобальные серверы.
+
+### Профили проектов
 
 В каждом проекте — профили `metadata`, `cloud` и `graph`.
 
@@ -118,7 +147,7 @@ Copy-Item .env.example .env
 | `cloud` | cloud_embeddings | Альтернатива CodeMetadata (облачные эмбеддинги) |
 | `graph` | neo4j + graph_metadata | Графовый поиск связей объектов |
 
-Без параметра `-Services` для проекта поднимается профиль `metadata`. Для шаблонов должен быть запущен `start-global.ps1`.
+Без параметра `-Services` для проекта поднимается профиль `metadata`.
 
 ## Настройки индексации
 
