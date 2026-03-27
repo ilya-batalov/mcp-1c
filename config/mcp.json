@@ -24,54 +24,6 @@
                                                 "connection_id":  "1c_templates_search_001",
                                                 "url":  "http://localhost:8004/mcp"
                                             },
-                       "1c-code-metadata-buh-mcp":  {
-                                                        "connection_id":  "1c_code_metadata_buh_001",
-                                                        "url":  "http://localhost:8100/mcp"
-                                                    },
-                       "1c-cloud-buh-mcp":  {
-                                                "connection_id":  "1c_cloud_buh_001",
-                                                "url":  "http://localhost:8101/mcp"
-                                            },
-                       "1c-graph-metadata-buh-mcp":  {
-                                                         "connection_id":  "1c_graph_metadata_buh_001",
-                                                         "url":  "http://localhost:8106/mcp"
-                                                     },
-                       "1c-code-metadata-roznica-mcp":  {
-                                                            "connection_id":  "1c_code_metadata_roznica_001",
-                                                            "url":  "http://localhost:8400/mcp"
-                                                        },
-                       "1c-cloud-roznica-mcp":  {
-                                                    "connection_id":  "1c_cloud_roznica_001",
-                                                    "url":  "http://localhost:8401/mcp"
-                                                },
-                       "1c-graph-metadata-roznica-mcp":  {
-                                                             "connection_id":  "1c_graph_metadata_roznica_001",
-                                                             "url":  "http://localhost:8406/mcp"
-                                                         },
-                       "1c-code-metadata-testzup-mcp":  {
-                                                            "connection_id":  "1c_code_metadata_testzup_001",
-                                                            "url":  "http://localhost:8300/mcp"
-                                                        },
-                       "1c-cloud-testzup-mcp":  {
-                                                    "connection_id":  "1c_cloud_testzup_001",
-                                                    "url":  "http://localhost:8301/mcp"
-                                                },
-                       "1c-graph-metadata-testzup-mcp":  {
-                                                             "connection_id":  "1c_graph_metadata_testzup_001",
-                                                             "url":  "http://localhost:8306/mcp"
-                                                         },
-                       "1c-code-metadata-unf-mcp":  {
-                                                        "connection_id":  "1c_code_metadata_unf_001",
-                                                        "url":  "http://localhost:8500/mcp"
-                                                    },
-                       "1c-cloud-unf-mcp":  {
-                                                "connection_id":  "1c_cloud_unf_001",
-                                                "url":  "http://localhost:8501/mcp"
-                                            },
-                       "1c-graph-metadata-unf-mcp":  {
-                                                         "connection_id":  "1c_graph_metadata_unf_001",
-                                                         "url":  "http://localhost:8506/mcp"
-                                                     },
                        "1c-code-metadata-zupreg-mcp":  {
                                                            "connection_id":  "1c_code_metadata_zupreg_001",
                                                            "url":  "http://localhost:8200/mcp"
