@@ -10,9 +10,6 @@ global/volumes/
 projects/*/volumes/
 **/volumes/
 
-# Локальный векторный индекс метаданных (Chroma и т.п.)
-projects/*/code_metadata/
-
 # Выгрузки из Конфигуратора (большие, локальные)
 **/data/report/*
 **/data/src/*
