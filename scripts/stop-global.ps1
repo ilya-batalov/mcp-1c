@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     Остановка глобальных MCP-серверов.
 .DESCRIPTION
@@ -22,6 +22,16 @@ param(
 
 $ErrorActionPreference = "Stop"
 $root = Split-Path $PSScriptRoot -Parent
+
+# Кириллица в консоли Windows PowerShell 5.x (скрипт с UTF-8 BOM + UTF-8 вывод)
+if ($PSVersionTable.PSVersion.Major -lt 6) {
+    try { chcp 65001 | Out-Null } catch {}
+    try {
+        [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+        $OutputEncoding = [System.Text.Encoding]::UTF8
+    } catch {}
+}
+
 $composeFile = Join-Path $root "global\docker-compose.yml"
 
 if ($Services) {
