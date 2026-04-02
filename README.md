@@ -13,6 +13,7 @@
 │   ├── _template/          Шаблон для новых проектов
 │   ├── buh/                Бухгалтерия предприятия
 │   ├── zupreg/             ЗУП Рег
+│   ├── wms/                WMS (склад)
 │   ├── testzup/            ЗУП Упр
 │   ├── roznica/            Розница
 │   └── unf/                УНФ
@@ -101,14 +102,15 @@ Copy-Item .env.example .env
 |---|---|---|---|---|
 | buh | 8100 | 8106 | 8174 | 8187 |
 | zupreg | 8200 | 8206 | 8274 | 8287 |
-| testzup | 8300 | 8306 | 8374 | 8387 |
-| roznica | 8400 | 8406 | 8474 | 8487 |
-| unf | 8500 | 8506 | 8574 | 8587 |
+| wms | 8300 | 8306 | 8374 | 8387 |
+| testzup | 8400 | 8406 | 8474 | 8487 |
+| roznica | 8500 | 8506 | 8574 | 8587 |
+| unf | 8600 | 8606 | 8674 | 8687 |
 
 ## Добавление новой конфигурации
 
 ```powershell
-.\scripts\new-project.ps1 -Name erp -PortBase 8600
+.\scripts\new-project.ps1 -Name erp -PortBase 8700
 # Выгрузите данные из Конфигуратора в projects\erp\data\
 .\scripts\start-project.ps1 -Name erp
 .\scripts\generate-mcp-json.ps1

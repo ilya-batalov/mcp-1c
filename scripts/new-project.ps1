@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Создаёт новый проект из шаблона.
 .PARAMETER Name
@@ -6,7 +6,9 @@
 .PARAMETER PortBase
     Базовый порт (8100, 8200, ... с шагом 100).
 .EXAMPLE
-    .\new-project.ps1 -Name erp -PortBase 8600
+    .\new-project.ps1 -Name wms -PortBase 8300
+.EXAMPLE
+    .\new-project.ps1 -Name erp -PortBase 8700
 #>
 
 param(

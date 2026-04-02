@@ -1,8 +1,8 @@
-﻿<#
+<#
 .SYNOPSIS
     Остановка MCP-серверов для конкретной конфигурации 1С.
 .PARAMETER Name
-    Имя проекта (buh, zupreg, testzup, roznica, unf).
+    Имя проекта (buh, zupreg, wms, testzup, roznica, unf).
 .PARAMETER Services
     Какие сервисы остановить: metadata, cloud, graph.
     Без параметра — останавливаются все контейнеры проекта.

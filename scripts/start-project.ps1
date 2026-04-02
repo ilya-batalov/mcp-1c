@@ -1,8 +1,8 @@
-﻿<#
+<#
 .SYNOPSIS
     Запуск MCP-серверов для конкретной конфигурации 1С.
 .PARAMETER Name
-    Имя проекта (buh, zupreg, testzup, roznica, unf).
+    Имя проекта (buh, zupreg, wms, testzup, roznica, unf).
 .PARAMETER Services
     Какие сервисы запускать: metadata, cloud, graph.
     Шаблоны кода (template-search-mcp) поднимаются глобально — см. start-global.ps1.

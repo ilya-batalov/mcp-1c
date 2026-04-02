@@ -81,4 +81,4 @@ services:
       OPENAI_MODEL: ${GLOBAL_OPENAI_MODEL}
       EMBEDDING_DIMENSIONS: "${EMBEDDING_DIMENSIONS:-}"
     volumes:
-      - "./volumes/template_search:/app/data"
+      - "./volumes/template_search:/app/chroma_db"
