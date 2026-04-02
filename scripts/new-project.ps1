@@ -32,16 +32,17 @@ $templateDir = Join-Path $root "projects\_template"
 
 Write-Host "Создание проекта '$Name' (PORT_BASE=$PortBase)..." -ForegroundColor Cyan
 
-New-Item -ItemType Directory -Force -Path @(
+$gitkeepDirs = @(
     "$projectDir\data\report",
     "$projectDir\data\src",
     "$projectDir\volumes\code_metadata",
     "$projectDir\volumes\cloud_embeddings",
     "$projectDir\volumes\graph_neo4j"
-) | Out-Null
-
-New-Item -ItemType File -Force -Path "$projectDir\data\report\.gitkeep" | Out-Null
-New-Item -ItemType File -Force -Path "$projectDir\data\src\.gitkeep" | Out-Null
+)
+New-Item -ItemType Directory -Force -Path $gitkeepDirs | Out-Null
+foreach ($d in $gitkeepDirs) {
+    New-Item -ItemType File -Force -Path (Join-Path $d ".gitkeep") | Out-Null
+}
 
 Copy-Item (Join-Path $templateDir "docker-compose.yml") $projectDir
 
