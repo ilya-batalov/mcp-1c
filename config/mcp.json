@@ -24,17 +24,13 @@
                                                 "connection_id":  "1c_templates_search_001",
                                                 "url":  "http://localhost:8004/mcp"
                                             },
+                       "1c-code-metadata-wms-mcp":  {
+                                                        "connection_id":  "1c_code_metadata_wms_001",
+                                                        "url":  "http://localhost:8300/mcp"
+                                                    },
                        "1c-code-metadata-zupreg-mcp":  {
                                                            "connection_id":  "1c_code_metadata_zupreg_001",
                                                            "url":  "http://localhost:8200/mcp"
-                                                       },
-                       "1c-cloud-zupreg-mcp":  {
-                                                   "connection_id":  "1c_cloud_zupreg_001",
-                                                   "url":  "http://localhost:8201/mcp"
-                                               },
-                       "1c-graph-metadata-zupreg-mcp":  {
-                                                            "connection_id":  "1c_graph_metadata_zupreg_001",
-                                                            "url":  "http://localhost:8206/mcp"
-                                                        }
+                                                       }
                    }
 }

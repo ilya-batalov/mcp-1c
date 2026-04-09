@@ -10,7 +10,7 @@ services:
       LICENSE_KEY: ${LICENSE_KEY_SYNTAX_CHECK}
 
   help_search:
-    image: comol/1c_help_mcp:latest
+    image: comol/1c_help_mcp:light
     container_name: mcp_help_search
     restart: unless-stopped
     ports:
@@ -25,7 +25,6 @@ services:
     volumes:
       - "${PLATFORM_BIN_PATH}:/1c_docs:ro"
       - "./volumes/help_search:/app/chroma_db"
-      - "./volumes/model_cache:/app/model_cache"
 
   code_checker:
     image: comol/1c-code-checker:latest
@@ -38,7 +37,7 @@ services:
       ONEC_AI_TOKEN: ${ONEC_AI_TOKEN}
 
   ssl_search:
-    image: comol/mcp_ssl_server:latest
+    image: comol/mcp_ssl_server:light
     container_name: mcp_ssl_search
     restart: unless-stopped
     ports:
@@ -67,7 +66,7 @@ services:
       LICENSE_KEY: ${LICENSE_KEY_FORMS_SERVER}
 
   template_search:
-    image: comol/template-search-mcp:latest
+    image: comol/template-search-mcp:light
     container_name: mcp_template_search
     restart: unless-stopped
     ports:
